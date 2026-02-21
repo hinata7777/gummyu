@@ -1,24 +1,50 @@
-# README
+# GummyU（仮）🍬
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+グミ特化のSNS / レビュー投稿アプリです。  
+新商品・期間限定商品が次々に出るグミの世界で、「買ってみたけどハズレだった…」を減らしつつ、**自分のグミ記録**と**みんなのレビュー**を集められる場所を作ります。
 
-Things you may want to cover:
+---
 
-* Ruby version
+## なぜ作るのか（Purpose）
 
-* System dependencies
+グミはコンビニでも新商品が頻繁に入れ替わり、期間限定も多いジャンルです。  
+一方で、実際に食べてみないと味や食感が分からず、試して失敗することもあります。
 
-* Configuration
+GummyUは、
 
-* Database creation
+- 自分が食べたグミを **記録（ログ）** できる
+- 他の人のレビューから **買う前にイメージ** できる
+- 評価の高いグミ・話題の新作を **見つけやすい**
 
-* Database initialization
+そんな「グミの情報が集まるSNS」を目指します。
 
-* How to run the test suite
+---
 
-* Services (job queues, cache servers, search engines, etc.)
+## MVP（まず作るもの）
 
-* Deployment instructions
+- グミ投稿（名前 / メーカー / 感想 / 評価 / 画像）
+- 投稿一覧・詳細
+- いいね / ブックマーク（どちらか先に）
+- 簡易検索（メーカー名・キーワード）
 
-* ...
+※ 画像は最初はURL保存 → 後でS3アップロードに対応予定
+
+---
+
+## 将来的にやりたいこと（Future）
+
+- Amazon / 楽天などの商品情報APIと連携して商品画像・商品ページを自動取得
+- ランキング（評価順・人気順）
+- タグ（食感：ハード/ソフト、味：フルーツ/ソーダ、酸っぱい系など）
+- 認証（JWT or Cookie）＆マイページ
+- デプロイ（AWS）
+
+---
+
+## Tech Stack
+
+- Frontend: Next.js + TypeScript（予定）
+- Backend: Ruby on Rails (API mode)
+- DB: PostgreSQL
+- Infra: Docker / Docker Compose
+- Deploy: AWS（予定）
