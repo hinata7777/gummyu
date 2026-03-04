@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
-    get "health", to: "health#index"
+    resources :products, only: %i[index show create]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
