@@ -13,6 +13,7 @@ services:
   backend:
     build:
       context: ./backend
+    user: "${UID}:${GID}"
     environment:
       DATABASE_URL: postgres://app:password@db:5432/app_development
     ports:
