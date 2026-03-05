@@ -14,6 +14,9 @@ module Api
 
     def create
       product = Product.new(product_params)
+      
+      product.source = "manual" if product.source.blank?
+      product.external_id = SecureRandom.uuid if product.source == "manual" 
 
       if product.save
         render json: product, status: :created
