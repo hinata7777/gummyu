@@ -3,9 +3,14 @@
 module Api
   class ReviewsController < ApplicationController
     def index
-      product = Product.find(params[:product_id])
-      reviews = product.reviews.order(created_at: :desc)
-      render json: reviews
+      if params[:product_id].present?
+        product = Product.find(params[:product_id])
+        reviews = product.reviews.order(created_at: :desc)
+        render json: reviews
+      else
+        reviews = Review.includes(:product).order(created_at: :desc).limit(50)
+        render json: timeline_json(reviews)
+      end
     end
 
     def show
@@ -29,6 +34,17 @@ module Api
 
     def review_params
       params.require(:review).permit(:body, :flavor_rating, :texture_rating, :hardness_level)
+    end
+
+    def timeline_json(reviews)
+      reviews.as_json(
+        only: %i[id product_id body flavor_rating texture_rating hardness_level created_at],
+        include: {
+          product: {
+            only: %i[id name source external_id image_url product_url]
+          }
+        }
+      )
     end
   end
 end
