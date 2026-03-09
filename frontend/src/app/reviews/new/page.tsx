@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import type { Product } from "@/types/review";
+import { ProductPicker } from "@/components/ProductPicker";
 
 export default function NewReviewPage() {
-  const [productId, setProductId] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [body, setBody] = useState<string>("");
   const [flavor, setFlavor] = useState<number>(3);
   const [texture, setTexture] = useState<number>(3);
@@ -17,9 +19,9 @@ export default function NewReviewPage() {
     setError("");
     setSuccess("");
 
-    const pid = Number(productId);
-    if (!pid || pid <= 0) {
-      setError("product_id を正しく入力してね");
+    const pid = selectedProduct?.id;
+    if (!pid) {
+      setError("商品を選択してね");
       return;
     }
     if (!body.trim()) {
@@ -57,17 +59,7 @@ export default function NewReviewPage() {
       <h1 style={{ fontSize: 24, fontWeight: 700 }}>レビュー投稿</h1>
 
       <form onSubmit={onSubmit} style={{ marginTop: 16, display: "grid", gap: 12 }}>
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>product_id（数字）</span>
-          <input
-            value={productId}
-            onChange={(e) => setProductId(e.target.value)}
-            inputMode="numeric"
-            placeholder="例: 1"
-            style={{ border: "1px solid #ddd", borderRadius: 10, padding: 10 }}
-          />
-        </label>
-
+        <ProductPicker selectedProduct={selectedProduct} onSelect={(p) => setSelectedProduct(p)} />
         <label style={{ display: "grid", gap: 6 }}>
           <span>本文</span>
           <textarea

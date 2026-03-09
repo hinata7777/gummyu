@@ -4,7 +4,8 @@ module Api
   class ProductsController < ApplicationController
     def index
       products = Product.order(created_at: :desc)
-      render json: products
+      products = products.where("name ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+      render json: products.limit(20)
     end
 
     def show
