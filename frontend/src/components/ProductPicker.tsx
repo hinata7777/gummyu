@@ -12,6 +12,7 @@ export function ProductPicker({ selectedProduct, onSelect }: Props) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -44,6 +45,45 @@ export function ProductPicker({ selectedProduct, onSelect }: Props) {
 
     return () => clearTimeout(timer);
   }, [q]);
+
+  const handleCreateProduct = async () => {
+    const keyword = q.trim();
+    if (!keyword) return;
+
+    try {
+      setCreating(true);
+      setError("");
+
+      const res = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product: {
+            name: keyword,
+            image_url: "",
+            product_url: "",
+          },
+        }),
+      });
+
+      const data = (await res.json()) as Product;
+
+      if (!res.ok) {
+        setError("商品作成に失敗した");
+        return;
+      }
+
+      setResults([data]);
+      onSelect(data);
+      setQ(data.name);
+    } catch {
+      setError("商品作成に失敗した");
+    } finally {
+      setCreating(false);
+    }
+  };
 
   return (
     <section style={{ display: "grid", gap: 10 }}>
@@ -96,7 +136,21 @@ export function ProductPicker({ selectedProduct, onSelect }: Props) {
       )}
 
       {q.trim().length > 0 && !loading && results.length === 0 && !error && (
-        <div style={{ fontSize: 12, opacity: 0.8 }}>候補なし（次のステップで「手動登録」ボタンを追加する）</div>
+        <button
+          type="button"
+          onClick={handleCreateProduct}
+          disabled={creating}
+          style={{
+            textAlign: "left",
+            border: "1px solid #ddd",
+            borderRadius: 10,
+            padding: 10,
+            background: "white",
+            color: "#111",
+          }}
+        >
+          {creating ? "追加中..." : `「${q.trim()}」を追加（manual）`}
+        </button>
       )}
     </section>
   );
