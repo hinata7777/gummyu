@@ -1,9 +1,19 @@
+import Link from "next/link";
 import type { Review } from "@/types/review";
 
-export function ReviewCard({ review }: { review: Review }) {
+export function ReviewCard({ review, showProductName = true }: { review: Review; showProductName?: boolean }) {
   return (
     <article style={{ border: "1px solid #ddd", borderRadius: 12, padding: 12 }}>
-      <div style={{ fontWeight: 700 }}>{review.product?.name ?? `product_id=${review.product_id}`}</div>
+      {showProductName && (
+        <div style={{ fontWeight: 700 }}>
+          <Link
+            href={`/products/${review.product_id}`}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {review.product?.name ?? `product_id=${review.product_id}`}
+          </Link>
+        </div>
+      )}
 
       <div style={{ marginTop: 6 }}>{review.body}</div>
 
